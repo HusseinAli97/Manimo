@@ -1,5 +1,6 @@
+import { Link } from "react-router";
 import logo from "../assets/main.png";
-const Header = ({ setSearchQuery, searchQuery, }) => {
+const Header = ({ setSearchQuery, searchQuery }) => {
     return (
         <header>
             <nav className="bg-gray-700">
@@ -12,12 +13,14 @@ const Header = ({ setSearchQuery, searchQuery, }) => {
                         />
                     </div>
                     <div className="flex space-x-10">
-                        <div className="flex items-center space-x-1">
+                        <Link
+                            to="/"
+                            className="flex items-center space-x-1">
                             <span className="mt-1">💯</span>
-                            <span className="text-gray-50">
+                            <span className="text-gray-50 hover:text-indigo-500 duration-300">
                                 Top Manga
                             </span>
-                        </div>
+                        </Link>
                         <div className="flex items-center space-x-2">
                             <span className="mt-1 text-blue-600">
                                 ｡𖦹°‧

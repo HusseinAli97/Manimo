@@ -12,7 +12,8 @@ const HomePage = ({ loading, error, setRefetch, manga }) => {
                         className="text-blue-600 hover:text-blue-700 cursor-pointer duration-200"
                         onClick={() =>
                             setRefetch((prev) => prev + 1)
-                        }>
+                        }
+                        >
                         ⟳ Try Get Data Again
                     </button>
                 </div>

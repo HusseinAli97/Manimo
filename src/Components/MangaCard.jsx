@@ -1,9 +1,18 @@
 import { useState } from "react";
+import { Link } from "react-router";
 
 const MangaCard = ({ manga }) => {
     const [infoVisible, setInfoVisible] = useState(false);
     if (!manga) return;
-    const { images, title, type, score, synopsis, genres } = manga;
+    const {
+        images,
+        title,
+        type,
+        score,
+        synopsis,
+        genres,
+        publishing,
+    } = manga;
     return (
         <div className="relative my-3  ">
             {/* CARD */}
@@ -48,27 +57,37 @@ const MangaCard = ({ manga }) => {
                             </h3>
 
                             <p
-                                className="text-white/90 leading-7 text-lg"
+                                className="text-white/90 md:text-md   "
                                 area-label={synopsis}>
                                 {manga.synopsis && synopsis
-                                    ? synopsis.split(". ")[0]
+                                    ? synopsis.split(". ")[0].length >
+                                      100
+                                        ? synopsis
+                                              .split(". ")[0]
+                                              .slice(0, 100)
+                                        : synopsis.split(". ")[0]
                                     : ""}
                             </p>
-                            <a
-                                href="#"
+                            <Link
+                                to={`/manga/${manga.mal_id}`}
+                                aria-label={`View Details of ${title}`}
                                 className="inline-block mt-4 text-white underline text-lg font-semibold">
-                                {" "}
-                                Read More →
-                            </a>
+                                Details →
+                            </Link>
                         </div>
                     </div>
                 </div>
 
                 {/* TITLE AT BOTTOM */}
                 <div className="absolute  bottom-0 left-0 right-0 bg-linear-to-t from-black/80 to-transparent p-4">
-                    <h2 className="text-xl font-bold mb-1 text-white  text-shadow-lg text-shadow-gray-950">
-                        {title}
-                    </h2>
+                    <div className="flex items-center  justify-between">
+                        <h2 className="text-xl font-bold mb-1 text-white  text-shadow-lg text-shadow-gray-950">
+                            {title}
+                        </h2>
+                        <h3 className="font-semibold text-yellow-400 text-2xl">
+                            {publishing ? "ᯓ🏃🏻‍♀️‍➡️" : "✅️"}
+                        </h3>
+                    </div>
 
                     <div className="">
                         <span className="mr-1 text-xs border text-violet-300 rounded-sm px-1 bg-gray-900/20 shadow-lg">

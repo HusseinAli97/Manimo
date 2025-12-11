@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { Route, Routes } from "react-router";
 import Footer from "./Components/Footer.jsx";
 import Header from "./Components/Header.jsx";
+import DetailsPage from "./Pages/details.jsx";
 import HomePage from "./Pages/home.jsx";
+import NotFoundPage from "./Pages/not-found.jsx";
 import "./Styles/globals.css";
+Route;
 const API_URL = import.meta.env.VITE_API_BASE;
 
 const App = () => {
@@ -14,8 +18,9 @@ const App = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchMode, setSearchMode] = useState(false);
     const timerID = useRef(null);
-    const prevQueryRef = useRef("");
-    // top
+    const hadSearchRef = useRef(false);
+
+    // Main Page
     useEffect(() => {
         const controller = new AbortController();
         const getManga = async () => {
@@ -23,7 +28,7 @@ const App = () => {
             setError(null);
             try {
                 const res = await fetch(
-                    `${API_URL}/manga?page=1&limit=20`,
+                    `${API_URL}/manga?order_by=popularity&page=1&limit=20`,
                     {
                         signal: controller.signal,
                     }
@@ -43,34 +48,41 @@ const App = () => {
         getManga();
         return () => controller.abort();
     }, [refetch]);
-    // search
 
+    // search
     useEffect(() => {
+        // controller for stop fetching
         const controller = new AbortController();
 
         const trimmed = searchQuery.trim();
-        const prevTrimmed = prevQueryRef.current;
+        if (trimmed.length >= 2) {
+            hadSearchRef.current = true;
+        }
 
-        if (prevTrimmed.length >= 2 && trimmed.length === 0) {
-            searchMode(false);
+        // this mean the user using search and del it
+        if (hadSearchRef.current && trimmed.length === 0) {
+            setSearchMode(false);
+            // when input empty back to fetching prev effect
             setRefetch((prev) => prev + 1);
-            prevQueryRef.current = trimmed;
+            hadSearchRef.current = false;
+            // clear if any fetching happen
             return () => {
                 controller.abort();
             };
         }
+
+        // check if any timer still running after rerender
         if (trimmed.length < 2) {
             if (timerID.current) {
                 clearTimeout(timerID.current);
                 timerID.current = null;
             }
-            prevQueryRef.current = trimmed;
             setSearchMode(false);
             return () => {
                 controller.abort();
             };
         }
-
+        // if query more then 2 or more char
         setLoading(true);
         setError(null);
         setSearchMode(true);
@@ -83,7 +95,7 @@ const App = () => {
             const getSearch = async () => {
                 try {
                     const res = await fetch(
-                        `${API_URL}/manga?q=${searchQuery}&page=1&limit=15`,
+                        `${API_URL}/manga?q=${trimmed}&page=1&limit=15`,
                         {
                             signal: controller.signal,
                         }
@@ -91,6 +103,7 @@ const App = () => {
                     if (!res.ok)
                         throw new Error("Failed To Fetch Manga");
                     const data = await res.json();
+                    // if we canceled fetch don't set any data if u got data before we canceled
                     if (controller.signal.aborted) return;
                     setSearchResult(data.data);
                 } catch (err) {
@@ -104,7 +117,6 @@ const App = () => {
             };
             getSearch();
         }, 500);
-        prevQueryRef.current = trimmed;
         return () => {
             if (timerID.current) {
                 clearTimeout(timerID.current);
@@ -115,19 +127,33 @@ const App = () => {
     }, [searchQuery]);
 
     const mangaItems = searchMode ? searchResult : manga;
-
     return (
         <>
             <Header
                 setSearchQuery={setSearchQuery}
                 searchQuery={searchQuery}
             />
-            <HomePage
-                manga={mangaItems}
-                setRefetch={setRefetch}
-                error={error}
-                loading={loading}
-            />
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <HomePage
+                            manga={mangaItems}
+                            setRefetch={setRefetch}
+                            error={error}
+                            loading={loading}
+                        />
+                    }
+                />
+                <Route
+                    path="/manga/:id"
+                    element={<DetailsPage />}
+                />
+                <Route
+                    path="*"
+                    element={<NotFoundPage />}
+                />
+            </Routes>
             <Footer />
         </>
     );
