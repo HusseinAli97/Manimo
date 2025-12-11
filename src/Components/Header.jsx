@@ -1,5 +1,5 @@
 import logo from "../assets/main.png";
-const Header = () => {
+const Header = ({ setSearchQuery, searchQuery, }) => {
     return (
         <header>
             <nav className="bg-gray-700">
@@ -19,7 +19,9 @@ const Header = () => {
                             </span>
                         </div>
                         <div className="flex items-center space-x-2">
-                            <span className="mt-1 text-blue-600">｡𖦹°‧</span>
+                            <span className="mt-1 text-blue-600">
+                                ｡𖦹°‧
+                            </span>
                             <span className="text-gray-50">
                                 All Manga
                             </span>
@@ -29,7 +31,11 @@ const Header = () => {
                         <input
                             className="w-xs bg-gray-400 p-2 rounded-lg text-white placeholder:text-white  focus:outline-0"
                             type="text"
-                            placeholder="Search"
+                            placeholder="Search on Manga"
+                            value={searchQuery}
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                            }}
                         />
                     </div>
                 </div>

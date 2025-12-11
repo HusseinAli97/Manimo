@@ -20,7 +20,7 @@ const MangaCard = ({ manga }) => {
                 />
 
                 <div className="absolute inset-0 z-30">
-                    <div className="absolute w-60 sm:w-70 md:w-85 top-4 left-4 z-40 flex justify-between items-center">
+                    <div className="absolute w-70 sm:w-70 md:w-50 lg:w-60 xl:w-50 2xl:w-85 top-4 left-4 z-40 flex justify-between items-center">
                         <button
                             aria-label="Show info"
                             onClick={() =>
@@ -30,7 +30,7 @@ const MangaCard = ({ manga }) => {
                             <span className="text-2xl">👀</span>
                         </button>
                         <p className="text-gray-700 font-bold border border-transparent py-1 px-2 rounded shadow-2xl bg-linear-to-r from-sky-500/70 to-violet-400/70  ">
-                            {manga.score && score && `⭐️ ${score}`}
+                            ⭐️ {manga.score && score && score}
                         </p>
                     </div>
 
@@ -41,11 +41,15 @@ const MangaCard = ({ manga }) => {
                                 : " translate-y-full pointer-events-none"
                         }`}>
                         <div className="w-full h-full rounded-lg bg-linear-to-r from-sky-500/40 to-violet-400/40 backdrop-blur-sm p-6 flex flex-col justify-center items-center ">
-                            <h3 className="text-2xl font-bold text-white mb-3" aria-label={title}>
+                            <h3
+                                className="text-2xl font-bold text-white mb-3"
+                                aria-label={title}>
                                 {title}
                             </h3>
 
-                            <p className="text-white/90 leading-7 text-lg" area-label={synopsis}>
+                            <p
+                                className="text-white/90 leading-7 text-lg"
+                                area-label={synopsis}>
                                 {manga.synopsis && synopsis
                                     ? synopsis.split(". ")[0]
                                     : ""}
