@@ -1,6 +1,6 @@
 # 📚 Manimo — Anime & Manga Browser
 
-A modern single-page application for discovering, searching, and exploring anime and manga.  
+A modern single-page application for discovering, searching, and exploring  manga.  
 Manimo provides fast browsing, rich filters, and detailed information for each title — all powered by a public API such as **Jikan / MyAnimeList**.
 
 ---
