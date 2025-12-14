@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const Footer = () => {
     return (
         <footer className="w-full bg-gray-900 text-gray-300 py-10  relative bottom-0">
@@ -9,26 +11,11 @@ const Footer = () => {
 
                 {/* Links */}
                 <div className="flex gap-6 text-sm">
-                    <a
-                        href="#"
-                        className="hover:text-white transition">
+                    <Link 
+                        to="/"
+                        className="hover:text-gray-400 transition">
                         Home
-                    </a>
-                    <a
-                        href="#"
-                        className="hover:text-white transition">
-                        Anime
-                    </a>
-                    <a
-                        href="#"
-                        className="hover:text-white transition">
-                        Manga
-                    </a>
-                    <a
-                        href="#"
-                        className="hover:text-white transition">
-                        Contact
-                    </a>
+                    </Link>
                 </div>
 
                 {/* Copyright */}
