@@ -1,6 +1,15 @@
 import { Link } from "react-router";
 import logo from "../assets/main.png";
-const Header = ({ setSearchQuery, searchQuery }) => {
+import LimitSelector from "./LimitSelector";
+const Header = ({
+    setSearchQuery,
+    searchQuery,
+    setLimit,
+    limit,
+    setPage,
+    isHome,
+    setIsHome
+}) => {
     return (
         <header>
             <nav className="bg-gray-700">
@@ -12,27 +21,27 @@ const Header = ({ setSearchQuery, searchQuery }) => {
                             alt="logo"
                         />
                     </div>
+
                     <div className="flex space-x-10">
                         <Link
                             to="/"
+                            onClick={() => {
+                                setSearchQuery("");
+                                setPage(1);
+                                setIsHome(true)
+                            }}
                             className="flex items-center space-x-1">
-                            <span className="mt-1">💯</span>
-                            <span className="text-gray-50 hover:text-indigo-500 duration-300">
-                                Top Manga
-                            </span>
-                        </Link>
-                        <div className="flex items-center space-x-2">
                             <span className="mt-1 text-blue-600">
                                 ｡𖦹°‧
                             </span>
                             <span className="text-gray-50">
                                 All Manga
                             </span>
-                        </div>
+                        </Link>
                     </div>
                     <div className="text-white">
                         <input
-                            className="w-xs bg-gray-400 p-2 rounded-lg text-white placeholder:text-white  focus:outline-0"
+                            className="w-md bg-gray-400 p-2 rounded-lg text-white placeholder:text-white  focus:outline-0"
                             type="text"
                             placeholder="Search on Manga"
                             value={searchQuery}
@@ -41,6 +50,14 @@ const Header = ({ setSearchQuery, searchQuery }) => {
                             }}
                         />
                     </div>
+                    {isHome && (
+                        <div className="flex justify-center items-center gap-1">
+                            <LimitSelector
+                                limit={limit}
+                                setLimit={setLimit}
+                            />
+                        </div>
+                    )}
                 </div>
             </nav>
         </header>

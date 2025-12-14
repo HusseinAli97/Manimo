@@ -4,7 +4,7 @@ import Spinner from "../Components/Spinner";
 import fallBackImage from "../assets/notFound.jpg";
 const API_URL = import.meta.env.VITE_API_MANGA_URL;
 
-const DetailsPage = () => {
+const DetailsPage = ({setIsHome}) => {
     const { id } = useParams();
     const [manga, setManga] = useState({});
     const [loading, setLoading] = useState(true);
@@ -12,12 +12,14 @@ const DetailsPage = () => {
     const [error, setError] = useState(null);
     const [refetch, setRefetch] = useState(0);
     const [showMore, setShowMore] = useState(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         const controller = new AbortController();
 
         const getDetails = async () => {
+            setIsHome(false)
             try {
                 const res = await fetch(`${API_URL}/${id}`, {
                     signal: controller.signal,
@@ -36,6 +38,8 @@ const DetailsPage = () => {
 
                 setError(err.message);
             } finally {
+                
+                // eslint-disable-next-line no-unsafe-finally
                 if (controller.signal.aborted) return;
                 setLoading(false);
             }
@@ -132,8 +136,8 @@ const DetailsPage = () => {
                         {/* Card */}
                         <section className="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
                             {/* Cover */}
-                            <div className="col-span-1 flex items-start">
-                                <div className="w-full md:w-64 rounded-xl overflow-hidden shadow-md bg-gray-200 dark:bg-slate-800 h-96">
+                            <div className=" sm:col-span-4 md:col-span-2 lg:col-span-1  flex items-start">
+                                <div className="w-full  rounded-xl overflow-hidden shadow-md bg-gray-200 dark:bg-slate-800 h-96">
                                     <img
                                         src={
                                             manga?.images?.jpg
@@ -146,8 +150,8 @@ const DetailsPage = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="col-span-3">
-                                <article className=" dark:text-gray-200">
+                            <div className="sm:col-span-4 md:col-span-2 lg:col-span-3 ">
+                                <article className="  dark:text-gray-200">
                                     <h3 className="text-lg font-semibold mb-5">
                                         BackGround
                                     </h3>

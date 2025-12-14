@@ -19,7 +19,12 @@ const App = () => {
     const [searchMode, setSearchMode] = useState(false);
     const timerID = useRef(null);
     const hadSearchRef = useRef(false);
-
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
+    const [totalItems, setTotalItems] = useState(null);
+    const [lastPage, setLastPage] = useState(null);
+    const [hasNext, setHasNext] = useState(null);
+    const [isHome, setIsHome] = useState(true);
     // Main Page
     useEffect(() => {
         const controller = new AbortController();
@@ -28,7 +33,7 @@ const App = () => {
             setError(null);
             try {
                 const res = await fetch(
-                    `${API_URL}/manga?order_by=popularity&page=1&limit=20`,
+                    `${API_URL}/manga?order_by=mal_id&page=${page}&limit=${limit}`,
                     {
                         signal: controller.signal,
                     }
@@ -36,6 +41,9 @@ const App = () => {
                 if (!res.ok) throw new Error("Failed To Fetch Manga");
                 const data = await res.json();
                 setManga(data?.data ?? []);
+                setTotalItems(data.pagination.items.total);
+                setLastPage(data.pagination.last_visible_page);
+                setHasNext(data.pagination.has_next_page);
             } catch (err) {
                 if (err.name === "AbortError") return;
                 setError(err.message);
@@ -47,7 +55,7 @@ const App = () => {
         };
         getManga();
         return () => controller.abort();
-    }, [refetch]);
+    }, [refetch, limit, page]);
 
     // search
     useEffect(() => {
@@ -95,7 +103,7 @@ const App = () => {
             const getSearch = async () => {
                 try {
                     const res = await fetch(
-                        `${API_URL}/manga?q=${trimmed}&page=1&limit=15`,
+                        `${API_URL}/manga?q=${trimmed}&page=${page}&limit=${limit}`,
                         {
                             signal: controller.signal,
                         }
@@ -106,6 +114,10 @@ const App = () => {
                     // if we canceled fetch don't set any data if u got data before we canceled
                     if (controller.signal.aborted) return;
                     setSearchResult(data.data);
+                    setTotalItems(data.pagination.items.total);
+                    setLastPage(data.pagination.last_visible_page);
+
+                    setHasNext(data.pagination.has_next_page);
                 } catch (err) {
                     if (controller.signal.aborted) return;
                     setError(err.message);
@@ -124,14 +136,20 @@ const App = () => {
             }
             controller.abort();
         };
-    }, [searchQuery]);
+    }, [searchQuery, limit, page]);
 
     const mangaItems = searchMode ? searchResult : manga;
+
     return (
         <>
             <Header
                 setSearchQuery={setSearchQuery}
                 searchQuery={searchQuery}
+                setLimit={setLimit}
+                limit={limit}
+                setPage={setPage}
+                isHome={isHome}
+                setIsHome={setIsHome}
             />
             <Routes>
                 <Route
@@ -142,12 +160,19 @@ const App = () => {
                             setRefetch={setRefetch}
                             error={error}
                             loading={loading}
+                            page={page}
+                            setPage={setPage}
+                            totalItems={totalItems}
+                            limit={limit}
+                            has_next_page={hasNext}
+                            lastPage={lastPage}
+                            setIsHome={setIsHome}
                         />
                     }
                 />
                 <Route
                     path="/manga/:id"
-                    element={<DetailsPage />}
+                    element={<DetailsPage setIsHome={setIsHome} />}
                 />
                 <Route
                     path="*"
