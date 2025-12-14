@@ -5,8 +5,6 @@ import Header from "./Components/Header.jsx";
 import DetailsPage from "./Pages/details.jsx";
 import HomePage from "./Pages/home.jsx";
 import NotFoundPage from "./Pages/not-found.jsx";
-import "./Styles/globals.css";
-Route;
 const API_URL = import.meta.env.VITE_API_BASE;
 
 const App = () => {

@@ -13,7 +13,7 @@ const Pagination = ({
     lastPage,
 }) => {
     return (
-        <div className="flex items-center justify-between border-t bg-slate-700 border-white/10 px-4 py-3 sm:px-6">
+        <div className="flex items-center justify-between relative bottom-0 border-t bg-slate-700 border-white/10 px-4 py-3 sm:px-6">
             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                 <div>
                     <p className="text-sm text-gray-300">
